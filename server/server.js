@@ -17,7 +17,11 @@ dotenv.config();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: 'https://certifynow.vercel.app' }));
+app.use(cors({  
+  origin: 'https://certifynow.netlify.app', // your frontend's domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
