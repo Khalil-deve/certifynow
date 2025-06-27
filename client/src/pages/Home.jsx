@@ -18,7 +18,7 @@ export default function Home() {
 
   const fetchCertificates = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/certificates');
+      const res = await axios.get('https://certifynow.vercel.app/api/certificates');
       console.log('Fetched certificates:', res.data);
       setCertificates(res.data.data || []);
     } catch (err) {
@@ -28,7 +28,7 @@ export default function Home() {
 
   const fetchCertificateCount = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/certificates/count');
+      const res = await axios.get('https://certifynow.vercel.app/api/certificates/count');
       setCertificateCount(res.data.count);
     } catch (err) {
       console.error('Error fetching count', err);
