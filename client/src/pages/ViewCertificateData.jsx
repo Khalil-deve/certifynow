@@ -1,5 +1,7 @@
 import { Award, Calendar, User, Briefcase, Check, X, ArrowLeft, ExternalLink, Download } from 'lucide-react';
 import BackMenu from './BackMenu';
+import handleDownload from '../utils/handleDownload';
+
 
 export default function ViewCertificateData({ certificate }) {
     console.log('Certificate Data:', certificate);
@@ -138,19 +140,16 @@ export default function ViewCertificateData({ certificate }) {
 
                                 <div className="mt-8 flex flex-wrap gap-4 justify-center">
                                     {certificate.pdfDownloadUrl && (
-                                        <a
-                                            href={certificate.pdfDownloadUrl.split('?')[0]}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                        <button
+                                            onClick={handleDownload}
                                             className="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                         >
                                             <Download size={16} className="mr-2" />
                                             Download PDF
-                                        </a>
-
-
+                                        </button>
                                     )}
                                 </div>
+
 
                             </div>
                         </div>
