@@ -2,6 +2,7 @@ import { Award, Calendar, User, Briefcase, Check, X, ArrowLeft, ExternalLink, Do
 import BackMenu from './BackMenu';
 
 export default function ViewCertificateData({ certificate }) {
+    console.log('Certificate Data:', certificate);
     return (
         <div className="max-w-3xl mx-auto mt-2 p-6">
             <BackMenu />

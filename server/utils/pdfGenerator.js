@@ -34,7 +34,7 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
       doc.on('end', async () => {
         const pdfBuffer = Buffer.concat(buffers);
 
-       
+
 
         // Upload to Cloudinary (ensure .pdf in public_id)
         const uploadStream = cloudinary.uploader.upload_stream(
@@ -46,7 +46,7 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
           },
           (error, result) => {
             if (error) return reject(error);
-            resolve(result.secure_url); // Return secure URL from Cloudinary
+            resolve(result.public_id);
           }
         );
 

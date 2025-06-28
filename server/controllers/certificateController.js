@@ -132,6 +132,7 @@ const createCertificate = async (req, res) => {
 //  @route GET /api/certificates/:id
 //  @access Public
 //  
+
 const getCertificateById = async (req, res) => {
   try {
     const certificate = await Certificate.findOne({ certificateId: req.params.id });
