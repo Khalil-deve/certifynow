@@ -134,20 +134,20 @@ const createCertificate = async (req, res) => {
 const getCertificateById = async (req, res) => {
   try {
     const certificate = await Certificate.findOne({ certificateId: req.params.id });
-    
+
     if (!certificate) {
       return res.status(404).json({
         success: false,
         message: 'Certificate not found'
       });
     }
-    
+
     res.status(200).json({
       success: true,
       data: {
         ...certificate.toObject(),
-        pdfUrl: `${req.protocol}://${req.get('host')}${certificate.pdfPath}`,
-        qrCodeUrl: `${req.protocol}://${req.get('host')}${certificate.qrCodeUrl}`
+        pdfUrl: certificate.pdfPath,        // Already Cloudinary secure URL
+        qrCodeUrl: certificate.qrCodeUrl    // Already Cloudinary secure URL
       }
     });
   } catch (error) {
@@ -159,6 +159,7 @@ const getCertificateById = async (req, res) => {
     });
   }
 };
+
 
 
 module.exports = {
