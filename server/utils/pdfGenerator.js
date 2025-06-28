@@ -1,6 +1,6 @@
 const PDFDocument = require('pdfkit');
 const axios = require('axios');
-const cloudinary = require('./cloudinary'); // Your cloudinary config file
+const cloudinary = require('./cloudinary'); // Cloudinary config
 const stream = require('stream');
 
 /**
@@ -30,19 +30,22 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
 
       const buffers = [];
       doc.on('data', buffers.push.bind(buffers));
+
       doc.on('end', async () => {
         const pdfBuffer = Buffer.concat(buffers);
 
-        // Upload to Cloudinary
+       
+
+        // Upload to Cloudinary (ensure .pdf in public_id)
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             folder: 'certifyNow/certificates',
-            public_id: certificateData.certificateId,
+            public_id: `${certificateData.certificateId}.pdf`,  // ← Important: add .pdf
             resource_type: 'raw'
           },
           (error, result) => {
             if (error) return reject(error);
-            resolve(result.secure_url);
+            resolve(result.secure_url); // Return secure URL from Cloudinary
           }
         );
 
@@ -73,13 +76,14 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
         doc.restore();
       };
 
-      // Design
+      // Background and borders
       doc.rect(0, 0, pageWidth, pageHeight).fill('#FFF');
       doc.lineWidth(4).rect(25, 25, pageWidth - 50, pageHeight - 50).stroke('#FFD700');
       doc.lineWidth(1).rect(35, 35, pageWidth - 70, pageHeight - 70).stroke('#B8860B');
       doc.save().lineWidth(1).dash(5, { space: 3 }).rect(45, 45, pageWidth - 90, pageHeight - 90).stroke('#FBBF24');
       doc.undash().restore();
 
+      // Title
       doc.font('Helvetica-Bold')
         .fontSize(42)
         .fill('#1E3A8A')
@@ -137,15 +141,13 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
         .text(certificateData.issuerDesignation, 100, signatureY + 85)
         .stroke('#1E3A8A');
 
-      // Load QR code from Cloudinary URL
+      // QR Code from Cloudinary
       const qrRes = await axios.get(qrCodeUrl, { responseType: 'arraybuffer' });
       const qrBuffer = Buffer.from(qrRes.data, 'binary');
-
       doc.image(qrBuffer, pageWidth - 140, signatureY + 40, {
         width: 80,
         align: 'right'
       });
-
       doc.fontSize(10)
         .fill('#1E3A8A')
         .text('Scan to Verify Authenticity', pageWidth - 170, signatureY + 30, {
@@ -156,7 +158,8 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
       // Watermark
       addWatermark();
 
-      doc.end();
+      doc.end(); // Important to end the document here
+
     } catch (error) {
       console.error('Error generating PDF:', error);
       reject(error);
