@@ -3,6 +3,7 @@ const generateCertificateId = require('../utils/generateCertificateId');
 const { generateQRCode } = require('../utils/qrCodeGenerator');
 const { generateCertificatePDF } = require('../utils/pdfGenerator');
 const { v4: uuidv4 } = require('uuid');
+const generateSignedDownloadUrl = require('../utils/generateSignedDownloadUrl');
 
 // Create a new certificate
 //   @route POST /api/certificates
@@ -11,7 +12,7 @@ const { v4: uuidv4 } = require('uuid');
 const getAllCertificates = async (req, res) => {
   try {
     const certificates = await Certificate.find({});
-    
+
     const certificatesWithUrls = certificates.map(certificate => ({
       ...certificate.toObject(),
       pdfUrl: `${req.protocol}://${req.get('host')}${certificate.pdfPath}`,
@@ -34,7 +35,7 @@ const getAllCertificates = async (req, res) => {
   }
 }
 
-const certificateCount = async (req, res) =>{
+const certificateCount = async (req, res) => {
   const certificates = await Certificate.find({});
   if (!certificates) {
     return res.status(404).json({
@@ -61,18 +62,18 @@ const certificateCount = async (req, res) =>{
 
 const createCertificate = async (req, res) => {
   try {
-    const { 
-      recipientName, 
-      CourseTitle, 
-      InstructorName, 
-      issuerDesignation 
+    const {
+      recipientName,
+      CourseTitle,
+      InstructorName,
+      issuerDesignation
     } = req.body;
 
     // 1. Validate
     if (!recipientName || !CourseTitle || !InstructorName || !issuerDesignation) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide all required fields' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields'
       });
     }
 
@@ -136,32 +137,25 @@ const getCertificateById = async (req, res) => {
     const certificate = await Certificate.findOne({ certificateId: req.params.id });
 
     if (!certificate) {
-      return res.status(404).json({
-        success: false,
-        message: 'Certificate not found'
-      });
+      return res.status(404).json({ success: false, message: 'Certificate not found' });
     }
 
-    // Convert to object and add secure URLs
-    console.log('the pdf path is:', certificate.pdfPath);
-    console.log('the qr code url is:', certificate.qrCodeUrl);
+    const signedPdfUrl = generateSignedDownloadUrl(certificate.certificateId);
+    console.log('Signed PDF URL:', signedPdfUrl);
     res.status(200).json({
       success: true,
       data: {
         ...certificate.toObject(),
-        pdfUrl: certificate.pdfPath,        // Already Cloudinary secure URL
-        qrCodeUrl: certificate.qrCodeUrl    // Already Cloudinary secure URL
+        pdfDownloadUrl: signedPdfUrl, // Use this in frontend
+        qrCodeUrl: certificate.qrCodeUrl
       }
     });
   } catch (error) {
     console.error('Error fetching certificate:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch certificate',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Error fetching certificate', error: error.message });
   }
 };
+
 
 
 

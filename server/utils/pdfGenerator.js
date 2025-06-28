@@ -41,7 +41,8 @@ const generateCertificatePDF = async (certificateData, qrCodeUrl) => {
           {
             folder: 'certifyNow/certificates',
             public_id: `${certificateData.certificateId}.pdf`,  // ← Important: add .pdf
-            resource_type: 'raw'
+            resource_type: 'raw',
+            type: 'authenticated'
           },
           (error, result) => {
             if (error) return reject(error);

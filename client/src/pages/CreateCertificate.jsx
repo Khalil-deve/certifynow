@@ -25,6 +25,12 @@ export default function CreateCertificate() {
       console.error(err);
     }
     setLoading(false);
+    setFormData({
+      recipientName: '',
+      CourseTitle: '',
+      InstructorName: '',
+      issuerDesignation: ''
+    });
   };
 
   return (
