@@ -1,4 +1,5 @@
 const Certificate = require('../models/Certificate');
+const generateCertificateId = require('../utils/generateCertificateId');
 const { generateQRCode } = require('../utils/qrCodeGenerator');
 const { generateCertificatePDF } = require('../utils/pdfGenerator');
 const { v4: uuidv4 } = require('uuid');
@@ -6,11 +7,6 @@ const { v4: uuidv4 } = require('uuid');
 // Create a new certificate
 //   @route POST /api/certificates
 //   @access Public
-
-const generateCertificateId = (year, courseCode, serial) => {
-  return `CERT-${year}-${courseCode}-${serial.toString().padStart(5, '0')}`;
-};
-
 
 const getAllCertificates = async (req, res) => {
   try {
@@ -64,7 +60,6 @@ const certificateCount = async (req, res) =>{
 }
 
 const createCertificate = async (req, res) => {
-  console.log("hello world");
   try {
     const { 
       recipientName, 
@@ -73,8 +68,7 @@ const createCertificate = async (req, res) => {
       issuerDesignation 
     } = req.body;
 
-    console.log(req.body);
-    // Validate request
+    // 1. Validate
     if (!recipientName || !CourseTitle || !InstructorName || !issuerDesignation) {
       return res.status(400).json({ 
         success: false, 
@@ -82,18 +76,16 @@ const createCertificate = async (req, res) => {
       });
     }
 
+    // 2. Generate Certificate ID
     const currentYear = new Date().getFullYear();
-    const courseCode = CourseTitle.substring(0, 2).toUpperCase(); // For example, 'FS' for Full Stack
+    const courseCode = CourseTitle.substring(0, 2).toUpperCase();
     const certificateId = generateCertificateId(currentYear, courseCode, Math.floor(Math.random() * 100000));
-    
-    // Base URL for verification (should be configured in environment variables)
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5000';
-    
-    // Generate QR code
+
+    // 3. Generate QR Code
+    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const qrCodeUrl = await generateQRCode(certificateId, baseUrl);
-    console.log('the base Url is: ', baseUrl);
-    console.log("the qecodeUrl is:", qrCodeUrl);
-    // Prepare certificate data
+
+    // 4. Prepare Data
     const certificateData = {
       certificateId,
       recipientName,
@@ -102,26 +94,28 @@ const createCertificate = async (req, res) => {
       issuerDesignation,
       issueDate: new Date(),
       qrCodeUrl,
-      pdfPath: '' // Will be updated after PDF generation
+      pdfPath: ''
     };
-    
-    // Generate PDF certificate
-    const pdfPath = await generateCertificatePDF(certificateData, qrCodeUrl);
-    certificateData.pdfPath = pdfPath;
-    
-    // Save certificate to database
+
+    // 5. Generate PDF
+    const pdfUrl = await generateCertificatePDF(certificateData, qrCodeUrl);
+    certificateData.pdfPath = pdfUrl;
+
+    // 6. Save to DB
     const certificate = new Certificate(certificateData);
     await certificate.save();
-    console.log("the certificate is:", certificate);
+
+    // 7. Return Response
     res.status(201).json({
       success: true,
       message: 'Certificate created successfully',
       data: {
         certificateId: certificate.certificateId,
-        pdfUrl: `${req.protocol}://${req.get('host')}${pdfPath}`,
-        qrCodeUrl: `${req.protocol}://${req.get('host')}${qrCodeUrl}`
+        pdfUrl: pdfUrl,
+        qrCodeUrl: qrCodeUrl
       }
     });
+
   } catch (error) {
     console.error('Error creating certificate:', error);
     res.status(500).json({
