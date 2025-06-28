@@ -142,6 +142,9 @@ const getCertificateById = async (req, res) => {
       });
     }
 
+    // Convert to object and add secure URLs
+    console.log('the pdf path is:', certificate.pdfPath);
+    console.log('the qr code url is:', certificate.qrCodeUrl);
     res.status(200).json({
       success: true,
       data: {
