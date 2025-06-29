@@ -1,28 +1,26 @@
 const Certificate = require('../models/Certificate');
 const generateCertificateId = require('../utils/generateCertificateId');
-const { generateQRCode } = require('../utils/qrCodeGenerator');
-const { generateCertificatePDF } = require('../utils/pdfGenerator');
 const { v4: uuidv4 } = require('uuid');
-const generateSignedDownloadUrl = require('../utils/generateSignedDownloadUrl');
 
-// Create a new certificate
-//   @route POST /api/certificates
-//   @access Public
 
+// Get all certificates
+//   @route GET /api/certificates
 const getAllCertificates = async (req, res) => {
   try {
     const certificates = await Certificate.find({});
-
-    const certificatesWithUrls = certificates.map(certificate => ({
-      ...certificate.toObject(),
-      pdfUrl: `${req.protocol}://${req.get('host')}${certificate.pdfPath}`,
-      qrCodeUrl: `${req.protocol}://${req.get('host')}${certificate.qrCodeUrl}`
-    }));
+    // If no certificates found, return 404
+    if (!certificates || certificates.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No certificates found',
+        data: []
+      });
+    }
 
     res.status(200).json({
       success: true,
-      count: certificates.length,
-      data: certificatesWithUrls
+      message: 'Certificates fetched successfully',
+      data: certificates
     });
 
   } catch (error) {
@@ -35,6 +33,8 @@ const getAllCertificates = async (req, res) => {
   }
 }
 
+// Get the count of all certificates
+//   @route GET /api/certificates/count
 const certificateCount = async (req, res) => {
   const certificates = await Certificate.find({});
   if (!certificates) {
@@ -60,6 +60,9 @@ const certificateCount = async (req, res) => {
   };
 }
 
+
+// Create a new certificate
+//   @route POST /api/certificates
 const createCertificate = async (req, res) => {
   try {
     const {
@@ -82,11 +85,7 @@ const createCertificate = async (req, res) => {
     const courseCode = CourseTitle.substring(0, 2).toUpperCase();
     const certificateId = generateCertificateId(currentYear, courseCode, Math.floor(Math.random() * 100000));
 
-    // 3. Generate QR Code
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-    const qrCodeUrl = await generateQRCode(certificateId, baseUrl);
 
-    // 4. Prepare Data
     const certificateData = {
       certificateId,
       recipientName,
@@ -94,29 +93,20 @@ const createCertificate = async (req, res) => {
       InstructorName,
       issuerDesignation,
       issueDate: new Date(),
-      qrCodeUrl,
-      pdfPath: ''
     };
 
-    // 5. Generate PDF
-    const pdfUrl = await generateCertificatePDF(certificateData, qrCodeUrl);
-    certificateData.pdfPath = pdfUrl;
-
-    // 6. Save to DB
+    // 5. Save to DB
     const certificate = new Certificate(certificateData);
     await certificate.save();
 
-    // 7. Return Response
+    // 6. Return Response
     res.status(201).json({
       success: true,
       message: 'Certificate created successfully',
       data: {
         certificateId: certificate.certificateId,
-        pdfUrl: pdfUrl,
-        qrCodeUrl: qrCodeUrl
       }
     });
-
   } catch (error) {
     console.error('Error creating certificate:', error);
     res.status(500).json({
@@ -127,12 +117,9 @@ const createCertificate = async (req, res) => {
   }
 };
 
-// 
-//  Get certificate by ID
-//  @route GET /api/certificates/:id
-//  @access Public
-//  
 
+// Get a certificate by ID
+//   @route GET /api/certificates/:id
 const getCertificateById = async (req, res) => {
   try {
     const certificate = await Certificate.findOne({ certificateId: req.params.id });
@@ -141,15 +128,10 @@ const getCertificateById = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Certificate not found' });
     }
 
-    const signedPdfUrl = generateSignedDownloadUrl(certificate.certificateId);
-    console.log('Signed PDF URL:', signedPdfUrl);
     res.status(200).json({
       success: true,
-      data: {
-        ...certificate.toObject(),
-        pdfDownloadUrl: signedPdfUrl, // Use this in frontend
-        qrCodeUrl: certificate.qrCodeUrl
-      }
+      message: 'Certificate fetched successfully',
+      data: certificate
     });
   } catch (error) {
     console.error('Error fetching certificate:', error);
@@ -157,9 +139,7 @@ const getCertificateById = async (req, res) => {
   }
 };
 
-
-
-
+// Export the controller functions
 module.exports = {
   getAllCertificates,
   certificateCount,

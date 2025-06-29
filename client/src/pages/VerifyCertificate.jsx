@@ -22,7 +22,7 @@ export default function VerifyCertificate() {
     }
 
     try {
-      const res = await axios.get(`https://certifynow.vercel.app/api/verify/${certificateId}`);
+      const res = await axios.get(`https://certifynow.vercel.app/verify/${certificateId}`);
       if (res.data && res.data.isValid) {
         setResult(res.data);
         toast.success('Certificate verified successfully!');

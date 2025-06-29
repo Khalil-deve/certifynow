@@ -1,4 +1,3 @@
-
 import { CheckCircle } from "lucide-react";
 
 export default function VerifyCertificateData({ result }) {

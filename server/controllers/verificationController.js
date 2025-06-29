@@ -1,10 +1,6 @@
 const Certificate = require('../models/Certificate');
 
-/*
-  Verify a certificate by ID
- @route GET /api/verify/:id
- @access Public
- */
+// Verify a certificate by its ID
 const verifyCertificate = async (req, res) => {
   try {
     const certificate = await Certificate.findOne({ certificateId: req.params.id });

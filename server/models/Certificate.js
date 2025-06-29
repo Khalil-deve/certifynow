@@ -26,14 +26,6 @@ const CertificateSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    pdfPath: {
-        type: String,
-        required: true
-    },
-    qrCodeUrl: {
-        type: String,
-        required: true
-    },
     isValid: {
         type: Boolean,
         default: true
