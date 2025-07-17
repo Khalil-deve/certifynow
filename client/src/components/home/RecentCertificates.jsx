@@ -5,10 +5,10 @@ export default function RecentCertificates({ certificates }) {
   const visibleCertificates = certificates.slice(0, 6); // Show only first 6
 
   return (
-    <div className="w-full max-w-7xl px-4 mx-auto">
+    <div className="w-full max-w-7xl mx-auto">
 
       {certificates.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">No certificates found.</p>
+        <p className="text-gray-500 dark:text-gray-400 ">No certificates found.</p>
       ) : (
         <>
           <ShowCertificateData certificates={visibleCertificates} title = 'Recent Certificates' />

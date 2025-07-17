@@ -40,7 +40,7 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col items-center justify-center text-center px-4 mt-8 mb-16">
+    <main className="flex flex-col items-center justify-center text-center px-2 mt-8 mb-16">
       <HeroSection />
       <InfoSection />
       

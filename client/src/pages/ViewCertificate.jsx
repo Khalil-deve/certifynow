@@ -1,15 +1,21 @@
-import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { getCertificateById, getAllCertificates } from '../services/certificateService';
-import CertificateHeader from './CertificateHeader';
-import ViewCertificateData from './ViewCertificateData';
-import ShowCertificateData from '../components/ShowCertificateData';
+import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  getCertificateById,
+  getAllCertificates,
+} from "../services/certificateService";
+import CertificateHeader from "./CertificateHeader";
+import ViewCertificateData from "./ViewCertificateData";
+import ShowCertificateData from "../components/ShowCertificateData";
 
 export default function ViewCertificate() {
   const navigate = useNavigate();
   const [certificate, setCertificate] = useState(null);
-  const [certificateId, setCertificateId] = useState('');
+  const location = useLocation();
+  const [certificateId, setCertificateId] = useState(
+    location.state?.certificateId || ""
+  );
   const [loading, setLoading] = useState(false);
   const [allCertificates, setAllCertificates] = useState([]);
 
@@ -19,6 +25,13 @@ export default function ViewCertificate() {
       .then((res) => setAllCertificates(res.data.data))
       .catch((err) => console.error(err));
   }, []);
+
+  //This will trigger handleVerify only when certificateId is set
+  useEffect(() => {
+    if (certificateId) {
+      handleVerify({ preventDefault: () => {} });
+    }
+  }, [certificateId]);
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -39,14 +52,23 @@ export default function ViewCertificate() {
     navigate(-1);
   };
 
-  const handleCardClick = (id) => {
+  const handleCardClick = async (id) => {
     setCertificateId(id);
-    handleVerify({ preventDefault: () => {} });
+    setLoading(true);
+    try {
+      const res = await getCertificateById(id);
+      setCertificate(res.data.data);
+    } catch (err) {
+      console.error(err);
+      setCertificate(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <div className="overflow-hidden max-w-3xl mx-auto p-6 rounded-lg">
+      <div className="overflow-hidden max-w-3xl mx-auto md:px-6 py-6 rounded-lg">
         <CertificateHeader message="View Certificate" />
         <form onSubmit={handleVerify} className="p-6 space-y-4">
           <div>
@@ -70,7 +92,7 @@ export default function ViewCertificate() {
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md font-medium"
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'View Certificate'}
+            {loading ? "Loading..." : "View Certificate"}
           </button>
         </form>
       </div>
@@ -88,7 +110,9 @@ export default function ViewCertificate() {
           <div className="flex items-center">
             <X className="text-red-500 mr-3" />
             <div>
-              <h3 className="text-lg font-bold text-red-500">Certificate Not Found</h3>
+              <h3 className="text-lg font-bold text-red-500">
+                Certificate Not Found
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 We couldn’t load the certificate. Please double-check the ID.
               </p>
@@ -102,7 +126,11 @@ export default function ViewCertificate() {
 
       {/* Grid of All Certificates */}
       {!certificateId && !certificate && allCertificates.length > 0 && (
-        <ShowCertificateData certificates = {allCertificates}  title='All Certificates'/>
+        <ShowCertificateData
+          certificates={allCertificates}
+          title="All Certificates"
+          onCardClick={handleCardClick}
+        />
       )}
     </>
   );
