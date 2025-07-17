@@ -39,7 +39,7 @@ export default function VerifyCertificate() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl rounded-2xl shadow-xl p-6 sm:p-10 space-y-6">
+      <div className="w-full max-w-2xl rounded-2xl shadow-xl md:px-6 py-6 sm:p-10 space-y-6">
         <CertificateHeader message="Verify Certificate" />
 
         <form onSubmit={handleVerify} className="space-y-4">

@@ -2,7 +2,7 @@ import HeroAboutCard from './HeroAboutCard';
 
 export default function HeroSection() {
   return (
-    <section className="w-full px-4 py-12">
+    <section className="w-full md:px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-white">
           Welcome to <span className="text-blue-600">CertifyNow</span>

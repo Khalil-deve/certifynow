@@ -22,7 +22,7 @@ export default function InfoSection() {
 
 
   return (
-    <section className="w-full max-w-6xl px-6 py-10 rounded-2xl my-10">
+    <section className="w-full max-w-6xl md:px-6 py-10 rounded-2xl my-10">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white text-center mb-6">
         About This Platform
       </h2>

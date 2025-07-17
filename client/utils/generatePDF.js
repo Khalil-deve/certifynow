@@ -1,8 +1,7 @@
 import jsPDF from 'jspdf';
 import sealBase64 from '../src/assets/seal2.png';
-/**
- * Dynamically adjusts font size for recipient name.
- */
+
+// Dynamically adjusts font size for recipient name.
 function calculateNameSize(name) {
     const length = name.length;
     if (length <= 20) return 36;
@@ -25,7 +24,7 @@ const addWatermark = (doc) => {
     doc.setFontSize(25);
     doc.setTextColor(30, 58, 138); // Deep blue
 
-    // 📌 Adjusted X and Y so the watermark is truly centered diagonally
+    //  Adjusted X and Y so the watermark is truly centered diagonally
     const watermarkText = 'CERTIFICATE OF AUTHENTICITY';
 
     doc.text(watermarkText, pageWidth / 2 + 70, pageHeight / 2 + 110, {
@@ -85,7 +84,7 @@ export const generatePDF = async (certificateData) => {
     doc.rect(45, 45, pageWidth - 90, pageHeight - 90);
     doc.setLineDashPattern([], 0); // Reset to solid line
 
-    // 📌 Title with Stroke
+    // Title with Stroke
     drawShadowText(
         doc,
         'CERTIFICATE OF APPRECIATION',
@@ -180,7 +179,7 @@ export const generatePDF = async (certificateData) => {
     const qrCodeCanvas = document.getElementById('qrcode');
     if (qrCodeCanvas) {
         const qrImg = qrCodeCanvas.toDataURL('image/png');
-        doc.addImage(qrImg, 'PNG', pageWidth - 140, signatureY + 40, 80, 80);
+        doc.addImage(qrImg, 'PNG', pageWidth - 160, signatureY + 40, 80, 80);
         doc.setFontSize(10);
         doc.text('Scan to Verify Authenticity', pageWidth - 120, signatureY + 30, { align: 'center' });
     }

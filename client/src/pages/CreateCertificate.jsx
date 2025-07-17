@@ -19,7 +19,7 @@ export default function CreateCertificate() {
     setLoading(true);
     try {
       const res = await createCertificate(formData);
-      toast.success(`Certificate Created! ID: ${res.data.data.certificateId}`);
+      toast.success(`Certificate Created! ${res.data.data.certificateId}`);
     } catch (err) {
       toast.error('Error creating certificate. Please try again.');
       console.error(err);
