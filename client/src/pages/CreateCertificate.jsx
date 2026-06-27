@@ -34,19 +34,24 @@ export default function CreateCertificate() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-blue-600 dark:text-blue-500 mb-6">
-          Create Certificate
-        </h2>
+    <div className="flex items-center justify-center px-4 py-8 sm:py-12">
+      <div className="w-full max-w-lg bg-white border border-gray-100 rounded-3xl shadow-xl shadow-gray-200/40 p-8 sm:p-10">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Create Certificate
+          </h2>
+          <p className="text-sm text-gray-500 mt-2">
+            Fill in the details below to generate a new verifiable credential.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block mb-1 text-gray-700 dark:text-gray-300 font-medium">Recipient Name</label>
+            <label className="block mb-2 text-sm font-bold text-gray-700">Recipient Name</label>
             <input
               type="text"
               placeholder="Enter recipient's full name"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               value={formData.recipientName}
               onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
               required
@@ -54,11 +59,11 @@ export default function CreateCertificate() {
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 dark:text-gray-300 font-medium">Course Title</label>
+            <label className="block mb-2 text-sm font-bold text-gray-700">Course Title</label>
             <input
               type="text"
               placeholder="e.g. Completed Full Stack Course"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               value={formData.CourseTitle}
               onChange={(e) => setFormData({ ...formData, CourseTitle: e.target.value })}
               required
@@ -66,11 +71,11 @@ export default function CreateCertificate() {
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 dark:text-gray-300 font-medium">Instructor Name</label>
+            <label className="block mb-2 text-sm font-bold text-gray-700">Instructor Name</label>
             <input
               type="text"
               placeholder="Course Instructor"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               value={formData.InstructorName}
               onChange={(e) => setFormData({ ...formData, InstructorName: e.target.value })}
               required
@@ -78,11 +83,11 @@ export default function CreateCertificate() {
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 dark:text-gray-300 font-medium">Issuer Designation</label>
+            <label className="block mb-2 text-sm font-bold text-gray-700">Issuer Designation</label>
             <input
               type="text"
               placeholder="e.g. Lead Web Instructor, CodeAcademy"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               value={formData.issuerDesignation}
               onChange={(e) => setFormData({ ...formData, issuerDesignation: e.target.value })}
               required
@@ -91,18 +96,33 @@ export default function CreateCertificate() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all"
+            className="w-full bg-brand-orange hover:bg-brand-orange-hover text-white py-3.5 px-4 rounded-xl font-bold transition-all duration-200 shadow-lg shadow-brand-orange/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             disabled={loading}
           >
-            {loading ? 'Generating...' : 'Generate Certificate'}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                <span>Generating...</span>
+              </div>
+            ) : (
+              'Generate Certificate'
+            )}
           </button>
         </form>
 
         <button
           onClick={() => navigate(-1)}
-          className="w-full mt-3 text-center text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          className="w-full mt-4 text-center text-sm font-semibold text-gray-500 hover:text-brand-orange transition-colors"
         >
-          ← Go Back
+          &larr; Go Back
         </button>
       </div>
     </div>

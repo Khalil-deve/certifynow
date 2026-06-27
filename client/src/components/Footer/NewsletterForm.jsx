@@ -1,21 +1,30 @@
 import { ArrowRight } from 'lucide-react';
 
 export default function NewsletterForm() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
-      <h3 className="text-md font-semibold text-gray-800 dark:text-white mb-2">Stay Updated</h3>
-      <p className="text-sm mb-3">Subscribe to get updates on new features and tools.</p>
-      <form className="flex flex-col sm:flex-row items-center sm:items-stretch">
+      <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Stay Updated</h3>
+      <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+        Subscribe to get updates on new features and tools.
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-0 rounded-xl overflow-hidden">
         <input
           type="email"
-          placeholder="Your email"
-          className="w-full px-3 py-2 rounded-l-md sm:rounded-md text-sm text-gray-800 focus:outline-none"
+          placeholder="Your email address"
+          aria-label="Your email address"
+          required
+          className="flex-1 px-4 py-3 bg-brand-navy-card border border-brand-navy-card text-white placeholder-gray-500 rounded-xl sm:rounded-r-none sm:rounded-l-xl focus:outline-none focus:border-brand-orange text-sm transition-colors"
         />
         <button
           type="submit"
-          className="mt-2 sm:mt-0 sm:ml-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center gap-1 text-sm"
+          className="px-5 py-3 bg-brand-orange hover:bg-brand-orange-hover text-white font-semibold rounded-xl sm:rounded-l-none sm:rounded-r-xl transition-all duration-200 flex items-center justify-center gap-1.5 text-sm shadow-md shadow-brand-orange/10 active:scale-95"
         >
-          Subscribe <ArrowRight size={16} />
+          <span>Subscribe</span>
+          <ArrowRight size={16} />
         </button>
       </form>
     </div>

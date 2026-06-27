@@ -1,43 +1,92 @@
-import { BadgeCheck, FileText, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Award, CheckCircle, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function HeroAboutCard() {
     return (
-        <div className="relative bg-gradient-to-br from-blue-50 via-white to-purple-100 dark:from-gray-800 dark:to-gray-900 p-6 sm:p-8 rounded-3xl max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
-            {/* Icon Section */}
-            <div className="relative w-full md:w-1/2 h-48 sm:h-60 flex items-center justify-center">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-200 dark:from-blue-900 dark:to-purple-900 rounded-full blur-2xl opacity-30" />
-                <div className="z-10 flex flex-row md:flex-col items-center justify-center space-x-3 md:space-x-0 md:space-y-4">
-                    <div className="bg-white dark:bg-gray-700 rounded-full p-3 sm:p-4 shadow-lg">
-                        <ShieldCheck className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 dark:text-blue-400" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4 md:px-0">
+            {/* Left promo banner: 2/3 width on desktop, brand orange */}
+            <div className="lg:col-span-2 relative bg-gradient-to-br from-brand-orange to-red-600 rounded-3xl p-8 sm:p-10 shadow-lg text-white flex flex-col justify-between overflow-hidden group min-h-[300px] sm:min-h-[350px]">
+                {/* Abstract decorative circles */}
+                <div className="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/10 blur-xl transition-all duration-500 group-hover:scale-125" />
+                <div className="absolute right-10 top-5 w-24 h-24 rounded-full bg-white/5 blur-lg" />
+                
+                <div>
+                    <span className="inline-block bg-white/20 text-white font-semibold text-xs tracking-wider uppercase px-3 py-1 rounded-full mb-6">
+                        FAST & SECURE
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight max-w-md">
+                        Generate Certificates in Seconds
+                    </h2>
+                    <p className="mt-4 text-white/90 text-sm sm:text-base max-w-lg leading-relaxed font-medium">
+                        Create encrypted, tamper-proof, and professionally styled PDF credentials for students, course completers, or employees instantly.
+                    </p>
+                </div>
+
+                <div className="mt-8">
+                    <Link
+                        to="/create"
+                        className="inline-flex items-center gap-2 bg-white text-brand-orange hover:text-brand-orange-hover font-bold text-sm sm:text-base px-6 py-3.5 rounded-2xl shadow-md transition-all duration-200 active:scale-95"
+                    >
+                        <span>Start Creating</span>
+                        <ArrowRight size={18} />
+                    </Link>
+                </div>
+            </div>
+
+            {/* Right column: Stacked cards (1/3 width) */}
+            <div className="flex flex-col gap-6">
+                {/* Top Navy Card */}
+                <div className="flex-1 relative bg-brand-navy-dark rounded-3xl p-6 sm:p-8 shadow-lg text-white flex flex-col justify-between overflow-hidden group min-h-[160px]">
+                    <div className="absolute -right-5 -bottom-5 w-24 h-24 rounded-full bg-white/5 blur-lg group-hover:scale-110 transition-transform duration-300" />
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <span className="text-xs text-brand-orange font-semibold uppercase tracking-wider">Verification API</span>
+                            <h3 className="text-xl font-bold mt-1 text-white">Verify Certificate</h3>
+                            <p className="text-gray-400 text-xs mt-1.5 leading-relaxed max-w-[200px]">
+                                Instant cryptographic validation using a credential ID.
+                            </p>
+                        </div>
+                        <div className="bg-brand-navy-card text-brand-orange p-2.5 rounded-xl shadow-inner border border-white/5">
+                            <Search size={20} />
+                        </div>
                     </div>
-                    <div className="bg-white dark:bg-gray-700 rounded-full p-3 sm:p-4 shadow-lg">
-                        <BadgeCheck className="w-8 h-8 sm:w-10 sm:h-10 text-green-600 dark:text-green-400" />
-                    </div>
-                    <div className="bg-white dark:bg-gray-700 rounded-full p-3 sm:p-4 shadow-lg">
-                        <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600 dark:text-purple-400" />
+                    <div className="mt-4">
+                        <Link
+                            to="/verify"
+                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-brand-orange transition-colors"
+                        >
+                            <span>Verify credential</span>
+                            <ArrowRight size={14} />
+                        </Link>
                     </div>
                 </div>
 
-            </div>
-
-            {/* Text Section */}
-            <div className="w-full md:w-1/2 text-center md:text-left">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-4">
-                    What is <span className="text-blue-600">CertifyNow</span>?
-                </h2>
-                <p className="text-yellow-700 text-base sm:text-lg mb-6">
-                    CertifyNow is a secure platform for generating, storing, and verifying digital certificates.
-                    Say goodbye to lost documents and hello to reliable, verifiable achievements — instantly and securely.
-                </p>
-                <Link
-                    to="/create"
-                    className="inline-block w-full sm:w-auto text-center bg-purple-600 px-6 py-3 text-white rounded-lg shadow hover:bg-purple-700 transition-all"
-                >
-                    Get Started
-                </Link>
+                {/* Bottom Teal Card */}
+                <div className="flex-1 relative bg-brand-teal rounded-3xl p-6 sm:p-8 shadow-lg text-white flex flex-col justify-between overflow-hidden group min-h-[160px]">
+                    <div className="absolute -right-5 -bottom-5 w-24 h-24 rounded-full bg-white/10 blur-lg group-hover:scale-110 transition-transform duration-300" />
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <span className="text-xs text-white/80 font-semibold uppercase tracking-wider">Directory</span>
+                            <h3 className="text-xl font-bold mt-1 text-white">Public Records</h3>
+                            <p className="text-white/80 text-xs mt-1.5 leading-relaxed max-w-[200px]">
+                                Search and view all public digital certificates.
+                            </p>
+                        </div>
+                        <div className="bg-white/15 text-white p-2.5 rounded-xl shadow-inner">
+                            <Award size={20} />
+                        </div>
+                    </div>
+                    <div className="mt-4">
+                        <Link
+                            to="/view"
+                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-white/80 transition-colors"
+                        >
+                            <span>View records</span>
+                            <ArrowRight size={14} />
+                        </Link>
+                    </div>
+                </div>
             </div>
         </div>
-
     );
 }

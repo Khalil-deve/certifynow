@@ -67,54 +67,65 @@ export default function ViewCertificate() {
   };
 
   return (
-    <>
-      <div className="overflow-hidden max-w-3xl mx-auto md:px-6 py-6 rounded-lg">
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="bg-white border border-gray-100 rounded-3xl shadow-xl shadow-gray-200/40 p-8 sm:p-10 mb-8">
         <CertificateHeader message="View Certificate" />
-        <form onSubmit={handleVerify} className="p-6 space-y-4">
+        <form onSubmit={handleVerify} className="mt-6 space-y-5">
           <div>
             <label
               htmlFor="certificateId"
-              className="text-sm font-medium text-white block mb-2"
+              className="text-sm font-bold text-gray-700 block mb-2"
             >
               Certificate ID
             </label>
             <input
               id="certificateId"
               type="text"
-              placeholder="Enter your certificate ID"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="e.g. CERT-123456"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               value={certificateId}
               onChange={(e) => setCertificateId(e.target.value)}
+              required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md font-medium"
+            className="w-full bg-brand-orange hover:bg-brand-orange-hover text-white py-3.5 rounded-xl font-bold transition-all duration-200 shadow-lg shadow-brand-orange/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center"
             disabled={loading}
           >
-            {loading ? "Loading..." : "View Certificate"}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                <span>Loading credential...</span>
+              </div>
+            ) : (
+              "View Certificate"
+            )}
           </button>
         </form>
       </div>
 
-      {/* Loading State */}
+      {/* Loading State indicator */}
       {loading && (
-        <div className="flex justify-center items-center mt-6">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+        <div className="flex justify-center items-center my-10">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-orange"></div>
         </div>
       )}
 
-      {/* Certificate Not Found */}
+      {/* Certificate Not Found banner */}
       {certificate === null && certificateId && !loading && (
-        <div className="max-w-3xl mx-auto mt-6 p-4 bg-white dark:bg-gray-800 border-l-4 border-red-500 shadow rounded">
-          <div className="flex items-center">
-            <X className="text-red-500 mr-3" />
+        <div className="max-w-3xl mx-auto mt-6 p-5 bg-red-50/50 border border-red-100 shadow-sm rounded-2xl">
+          <div className="flex items-start">
+            <X className="text-red-500 mr-3 mt-0.5 shrink-0" />
             <div>
-              <h3 className="text-lg font-bold text-red-500">
+              <h3 className="text-base font-bold text-red-800">
                 Certificate Not Found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                We couldn’t load the certificate. Please double-check the ID.
+              <p className="text-sm text-red-700/80 mt-1 leading-relaxed">
+                We couldn’t find a certificate matching that ID. Please check the ID and try again.
               </p>
             </div>
           </div>
@@ -126,12 +137,15 @@ export default function ViewCertificate() {
 
       {/* Grid of All Certificates */}
       {!certificateId && !certificate && allCertificates.length > 0 && (
-        <ShowCertificateData
-          certificates={allCertificates}
-          title="All Certificates"
-          onCardClick={handleCardClick}
-        />
+        <div className="mt-8">
+          <ShowCertificateData
+            certificates={allCertificates}
+            title="All Issued Credentials"
+            onCardClick={handleCardClick}
+            isDarkTheme={false}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 }

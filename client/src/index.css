@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --color-brand-orange: #ff5a26;
+  --color-brand-orange-hover: #d84214;
+  --color-brand-navy-dark: #13111c;
+  --color-brand-navy-card: #1c1929;
+  --color-brand-teal: #009e86;
+  --color-brand-teal-hover: #007e6b;
+  --color-brand-light-bg: #f7f7fb;
+}
+
+/* Base resets & styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-light-bg);
+  color: #1f2937;
+}
+
+/* Custom focus styling for keyboard navigation (WCAG AA compliance) */
+*:focus-visible {
+  outline: 3px solid var(--color-brand-orange);
+  outline-offset: 2px;
+}
+

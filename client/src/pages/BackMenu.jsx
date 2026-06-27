@@ -10,7 +10,7 @@ export default function BackMenu() {
     return (
         <button
             onClick={handleGoBack}
-            className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-6 transition-colors"
+            className="flex items-center text-gray-500 hover:text-brand-orange font-semibold mb-6 transition-colors"
         >
             <ArrowLeft size={16} className="mr-1" /> Go Back
         </button>

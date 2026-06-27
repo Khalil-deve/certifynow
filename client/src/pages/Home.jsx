@@ -40,14 +40,24 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col items-center justify-center text-center px-2 mt-8 mb-16">
+    <div className="w-full flex flex-col items-stretch px-2 mt-4 mb-16 space-y-12">
       <HeroSection />
       <InfoSection />
+      <CertificateStats count={certificateCount} />
       
-       <CertificateStats count={certificateCount} />
+      <div className="flex flex-col items-center max-w-6xl mx-auto w-full px-4">
+        <div className="text-center max-w-xl mx-auto mb-4">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Search Digital Directory
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Find any issued credentials by searching the recipient's name or the unique Certificate ID.
+          </p>
+        </div>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
 
       <RecentCertificates certificates={filteredCerts} />
-    </main>
+    </div>
   );
 }

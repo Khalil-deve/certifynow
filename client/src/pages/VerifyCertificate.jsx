@@ -38,13 +38,13 @@ export default function VerifyCertificate() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl rounded-2xl shadow-xl md:px-6 py-6 sm:p-10 space-y-6">
+    <div className="flex items-center justify-center px-4 py-8 sm:py-12">
+      <div className="w-full max-w-2xl bg-white border border-gray-100 rounded-3xl shadow-xl shadow-gray-200/40 p-8 sm:p-10 space-y-6">
         <CertificateHeader message="Verify Certificate" />
 
-        <form onSubmit={handleVerify} className="space-y-4">
+        <form onSubmit={handleVerify} className="space-y-5">
           <div className="relative">
-            <label htmlFor="certificateId" className="text-sm font-semibold text-gray-700  mb-2 block">
+            <label htmlFor="certificateId" className="text-sm font-bold text-gray-700 mb-2 block">
               Certificate ID
             </label>
             <input
@@ -53,14 +53,15 @@ export default function VerifyCertificate() {
               placeholder="e.g. CERT-123456"
               value={certificateId}
               onChange={(e) => setCertificateId(e.target.value)}
-              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm dark:text-gray"
+              className="w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/10 text-sm text-gray-800 font-medium placeholder-gray-400 transition-all duration-200"
               required
             />
             {certificateId && (
               <button
                 type="button"
                 onClick={() => setCertificateId('')}
-                className="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-[3.1rem] text-gray-400 hover:text-gray-600 text-lg font-bold"
+                aria-label="Clear field"
               >
                 ×
               </button>
@@ -70,33 +71,20 @@ export default function VerifyCertificate() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2.5 px-4 text-sm font-medium text-white rounded-lg transition-all duration-200 ${
-              loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
-            } focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500`}
+            className="w-full bg-brand-orange hover:bg-brand-orange-hover text-white py-3.5 px-4 rounded-xl font-bold transition-all duration-200 shadow-lg shadow-brand-orange/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading ? (
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center gap-2">
                 <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  className="animate-spin h-5 w-5 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8z"
-                  />
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                 </svg>
-                Verifying...
+                <span>Verifying Credential...</span>
               </div>
             ) : (
               'Verify Certificate'
@@ -107,7 +95,7 @@ export default function VerifyCertificate() {
         </form>
 
         {result && result.isValid && (
-          <div className="mt-6">
+          <div className="mt-8 border-t border-gray-100 pt-6">
             <VerifyCertificateData result={result} />
           </div>
         )}
